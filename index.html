@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <title>Document</title>
     <style>
       body,
@@ -13,20 +14,47 @@
       #knack-dist_2 .loading {
         display: flex;
         justify-content: center;
+        flex-direction: column;
+
         align-items: center;
-        font-family: Arial, sans-serif;
+        font-family: Nunito, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         text-align: center;
         font-size: 1.5em;
-        padding: 10px;
+        min-width: 400px;
+        background-color: #3c9ee1; /* Blue background color */
+        padding: 20px;
+        height: 100vh; /* Make it full screen height */
+        color: white; /* White text color for better contrast */
+      }
+
+      .loading img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px; /* Space between the image and text */
       }
     </style>
   </head>
   <body>
-    <div id="knack-dist_2"><div class="loading">Loading...</div></div>
+    <div id="knack-dist_2">
+      <div class="loading">
+        <img src="./cadi.png" height="200px" width="200px" />
+        <h2 id="loading-txt">Loading</h2>
+      </div>
+    </div>
   </body>
   <script type="text/javascript">
     app_id = "64b841fbebd4370028a6cf26";
     distribution_key = "dist_2";
   </script>
   <script type="text/javascript" src="https://loader.knack.com/64b841fbebd4370028a6cf26/dist_2/knack.js"></script>
+  <script>
+    // Space for writing custom scripts on top of knack
+    
+    (function () {
+      // simple loading dots displayer
+      let count = 0,
+        el = document.getElementById("loading-txt");
+      setInterval(() => (el.textContent = "Loading" + ".".repeat(++count % 4)), 300);
+    })();
+  </script>
 </html>
