@@ -83,6 +83,12 @@
   </script>
   <script type="text/javascript" src="https://loader.knack.com/64b841fbebd4370028a6cf26/dist_2/knack.js"></script>
   <script>
+    // by default go to hashtag welcome
+    window.onload = function () {
+      if (!window.location.hash) {
+        window.location.href = window.location.origin + window.location.pathname + "#welcome/";
+      }
+    };
     // Space for writing custom scripts on top of knack
 
     (function () {
