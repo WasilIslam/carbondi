@@ -37,22 +37,23 @@
     <meta name="author" content="Carbon Footprint's CaDI" />
     <meta name="robots" content="index, follow" />
     <title>CaDI</title>
+    <!-- Nunito Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;900&display=swap" rel="stylesheet" />
+
     <style>
       body,
       html {
         margin: 0;
         padding: 0;
+        font-family: "Nunito", sans-serif;
       }
       #knack-dist_2 .loading {
         display: flex;
         justify-content: center;
         flex-direction: column;
-
         align-items: center;
-        font-family: Nunito, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         text-align: center;
         font-size: 1.5em;
-
         background-color: #3c9ee1; /* Blue background color */
         padding: 20px;
         height: 100vh; /* Make it full screen height */
@@ -67,38 +68,136 @@
         height: auto;
         margin-bottom: 20px; /* Space between the image and text */
       }
+      .footer {
+        background-color: #f9f9f9;
+        padding: 20px;
+        text-align: left;
+      }
+      .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      .footer-column {
+        flex: 1;
+        min-width: 200px;
+      }
+      .footer-column strong {
+        font-weight: 700;
+      }
+      .footer a {
+        color: #348dd4;
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
     <div id="knack-dist_2">
       <div class="loading">
-        <img src="./cadi.png" height="200px" width="200px" />
+        <img src="./cadi.png" height="200px" width="200px" alt="Carbon Database Initiative Logo" />
         <h2 id="loading-txt">Loading</h2>
       </div>
     </div>
-  </body>
-  <script type="text/javascript">
-    app_id = "64b841fbebd4370028a6cf26";
-    distribution_key = "dist_2";
-  </script>
-  <script type="text/javascript" src="https://loader.knack.com/64b841fbebd4370028a6cf26/dist_2/knack.js"></script>
-  <script>
-    // by default go to hashtag welcome
-    window.onload = function () {
-      if (!window.location.hash) {
-        window.location.href = window.location.origin + window.location.pathname + "#welcome/";
-      }
-    };
-    // Space for writing custom scripts on top of knack
 
-    (function () {
-      // simple loading dots displayer
-      let count = 0,
-        el = document.getElementById("loading-txt");
-      setInterval(() => {
-        let dots = ".".repeat(++count % 4);
-        el.textContent = `Loading${dots.padEnd(3, " ")}`;
-      }, 300);
-    })();
-  </script>
+    <script type="text/javascript">
+      app_id = "64b841fbebd4370028a6cf26";
+      distribution_key = "dist_2";
+    </script>
+    <script type="text/javascript" src="https://loader.knack.com/64b841fbebd4370028a6cf26/dist_2/knack.js"></script>
+    <script>
+        function run() {
+          console.log("RUNNING");
+          
+      
+          const loadingText = document.getElementById("loading-txt");
+          const loadingScreen = document.querySelector(".loading");
+      
+          // Footer HTML
+          const footerHTML = `
+            <div class="view-group view-group-4">
+              <div class="view-column view-column-group-4">
+                <div class="kn-rich_text kn-view view_158" id="view_158">
+                  <div class="content kn-rich_text__content">
+                    <p><strong>Carbon Database Initiative is brought to you by Carbon Footprint Ltd</strong></p>
+                    <p>Carbon Footprint Ltd is registered in England and Wales (no. 4532520)<br>
+                    Registered Office: Belvedere House, Basing View, Basingstoke, Hampshire, RG21 4HG, UK</p>
+                  </div>
+                </div>
+              </div>
+              <div class="view-column view-column-group-4">
+                <div class="kn-rich_text kn-view view_165" id="view_165">
+                  <div class="content kn-rich_text__content">
+                    <p style="text-align: right;">
+                      <a href="https://carbondi.com/#terms-and-conditions/">Terms And Conditions</a><br>
+                      <a href="https://carbondi.com/#cookie-policy/">Cookie Policy</a>
+                    </p>
+                    <p style="text-align: right;">© Carbon Footprint Ltd - all rights reserved  
+                      <a href="https://www.carbonfootprint.com/">carbonfootprint.com</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+      
+          const footerID = "custom-footer"; // Unique ID for the footer
+          let count = 0;
+      
+          // Loading animation
+          const loadingInterval = setInterval(() => {
+            if (loadingText) {
+              const dots = ".".repeat(++count % 4);
+              loadingText.textContent = `Loading${dots.padEnd(3, " ")}`;
+            }
+          }, 300);
+      
+          // MutationObserver to inject footer when .group-layout-wrapper is loaded
+          const observer = new MutationObserver(() => {
+            const knSection = document.querySelector(".group-layout-wrapper");
+      
+            if (knSection) {
+              console.log("KN Section loaded:", knSection);
+      
+              // Check if footer is already added
+              if (!document.getElementById(footerID)) {
+                if(document.body.innerText.includes("Carbon Database Initiative is brought to you by Carbon Footprint Ltd")) throw "already exists"
+                clearInterval(loadingInterval); // Stop loading dots
+                if (loadingScreen) loadingScreen.style.display = "none"; // Hide loading screen
+      
+                const footer = document.createElement("div");
+                footer.id = footerID; // Assign unique ID to the footer
+                footer.className="view-group"
+                footer.innerHTML = footerHTML;
+                knSection.append(footer); // Inject footer
+              } else {
+                console.log("Footer already added.");
+              }
+      
+              observer.disconnect(); // Stop observing once footer is added
+            }
+          });
+      
+          // Start observing #knack-dist_2 container
+          const targetNode = document.getElementById("knack-dist_2");
+          if (targetNode) {
+            observer.observe(targetNode, {
+              childList: true,
+              subtree: true,
+            });
+          } else {
+            console.error("Error: #knack-dist_2 container not found.");
+          }
+        }
+      
+        // Run on load
+        run();
+      
+        // Re-run on hash change
+        window.addEventListener("hashchange", run);
+      </script>
+      
+      
+    </script>
+  </body>
 </html>
